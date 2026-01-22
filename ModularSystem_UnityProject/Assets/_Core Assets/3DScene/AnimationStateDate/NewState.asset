@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 505a0f3b36d42814a9064f64a4dc275c, type: 3}
   m_Name: NewState
   m_EditorClassIdentifier: 
-  state: {fileID: 0}
-  propertyNames: []
+  state: {fileID: 2100000, guid: 00ba7f4391f6f9f4bbb9dd2fd59756c8, type: 2}
+  propertyNames:
+  - _PRScale
+  - _PRTone
+  - _PRMovementSpeed
+  - _PRDefence
+  - _PRValue

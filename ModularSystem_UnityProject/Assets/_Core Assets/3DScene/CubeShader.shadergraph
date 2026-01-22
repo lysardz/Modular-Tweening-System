@@ -14,6 +14,9 @@
         },
         {
             "m_Id": "3eae9267c4074e33844ed66a02fa5a03"
+        },
+        {
+            "m_Id": "4b78c4f8724a4effbea8c3b8abb890db"
         }
     ],
     "m_Keywords": [],
@@ -587,6 +590,9 @@
         },
         {
             "m_Id": "3eae9267c4074e33844ed66a02fa5a03"
+        },
+        {
+            "m_Id": "4b78c4f8724a4effbea8c3b8abb890db"
         }
     ]
 }
@@ -1845,6 +1851,34 @@
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
+    }
+}
+
+{
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
+    "m_ObjectId": "4b78c4f8724a4effbea8c3b8abb890db",
+    "m_Guid": {
+        "m_GuidSerialized": "0ec86cce-6ed2-4d98-a5f2-916cd4229832"
+    },
+    "m_Name": "PRValue",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "PRValue",
+    "m_DefaultReferenceName": "_PRValue",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": 0.0,
+    "m_FloatType": 0,
+    "m_RangeValues": {
+        "x": 0.0,
+        "y": 1.0
     }
 }
 

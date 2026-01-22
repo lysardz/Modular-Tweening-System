@@ -59,9 +59,10 @@ Material:
     - _Hue: 0.5
     - _MovementSpeed: 1
     - _PRDefence: 0
-    - _PRMovementSpeed: 1
-    - _PRScale: 1
-    - _PRTone: 0.5
+    - _PRMovementSpeed: 0.865
+    - _PRScale: 1.246
+    - _PRTone: 1
+    - _PRValue: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scale: 1

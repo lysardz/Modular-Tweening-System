@@ -378,6 +378,12 @@ MonoBehaviour:
         ease: 4
         strength: 0.3
         extra: 0
+    - propertyName: _PRValue
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
   - shouldReset: 1
     stateName: Attack
     animSO: {fileID: 11400000, guid: 31aaf6201f5cc1e4e861ea4c886bf43b, type: 2}
@@ -406,6 +412,12 @@ MonoBehaviour:
         ease: 4
         strength: 0.3
         extra: 0
+    - propertyName: _PRValue
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
   - shouldReset: 0
     stateName: Defend
     animSO: {fileID: 11400000, guid: 1c274e82ba02d9346a4432e636ac9404, type: 2}
@@ -429,6 +441,46 @@ MonoBehaviour:
         strength: 0.12
         extra: 0
     - propertyName: _PRDefence
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
+    - propertyName: _PRValue
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
+  - shouldReset: 0
+    stateName: NewState
+    animSO: {fileID: 11400000, guid: 1c274e82ba02d9346a4432e636ac9404, type: 2}
+    properties:
+    - propertyName: _PRScale
+      value: 0
+      settings:
+        ease: 2
+        strength: 0.42
+        extra: 0
+    - propertyName: _PRTone
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
+    - propertyName: _PRMovementSpeed
+      value: 0
+      settings:
+        ease: 2
+        strength: 0.12
+        extra: 0
+    - propertyName: _PRDefence
+      value: 0
+      settings:
+        ease: 4
+        strength: 0.3
+        extra: 0
+    - propertyName: _PRValue
       value: 0
       settings:
         ease: 4
