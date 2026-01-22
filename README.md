@@ -10,4 +10,4 @@ This is currently only applied to material values, however the system can also b
 - You can create materials in the project folder based on material states for each animation. 
 - These are used to help visualise what the material will look like, and are not used in-game. 
 - Then create the scriptable object to assign the material values of the state.
-
+<img src="" alt="Alt text">
