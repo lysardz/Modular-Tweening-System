@@ -1,5 +1,5 @@
 # Early modular animation state tweening system
-This is an early framework for a modular animation state tweening system.
+This is an early framework for a modular animation state tweening system. It uses Dotween as a tween library for the tweening itself.
 
 ## Goals of this project.
 In the context of this project, it is used to tween material property values between states, with values assigned in that state. This is because an earlier version was used to animate SDF buttons in another project. 
