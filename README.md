@@ -11,7 +11,7 @@ This is an early framework for a modular animation state system for material cha
 - Capable of expanding toward **object transform tweening states**, or **any values needing lerping in code.**
 ## Goals of this project.
 The original purpose of making this system, was to drive the animation of an SDF button project I had made.
-Instead of using seperate images for complex motions, I opted to create and drive the effects in a shader.
+Instead of using separate images for complex motions, I opted to create and drive the effects in a shader.
 In this repo, I reapplied the system to a 3D object for demo purposes and to show its capabilities. 
 
 You can find the project [here](https://chain-collision-39b.notion.site/SDF-Buttons-and-Animation-System-Setup-2e993cf6835a80728d9be448a5bbd4fa?source=copy_link), and here is a preview of the effect:
@@ -26,7 +26,7 @@ Such as game object Transform - where transform states could then be stored and 
 ## Current setup in Unity:
 ### Creating states
 - You can create materials in the project folder based on material states for each animation. 
-- These are used to help visualise what the material will look like, and are not used in-game. 
+- These are used to help visualize what the material will look like, and are not used in-game. 
 - Then create the scriptable object to assign the material values of the state.
 - The StateSetter is used to set the values of all the states, whenever you create a new state or edit the materials and want to update state data.
 - NOTE: When adding more properties to animate, you can name them starting with “PR”. Only these are added, to avoid adding unwanted material properties.
