@@ -10,9 +10,9 @@ public class StateSetter : ScriptableObject
     [ContextMenu("Set States")]
     public void SetStates()
     {
-        foreach(var state in stateSOList)
+        foreach(var _state in stateSOList)
         {
-            state.SetValues();
+            _state.SetValues();
         }
     }
 }

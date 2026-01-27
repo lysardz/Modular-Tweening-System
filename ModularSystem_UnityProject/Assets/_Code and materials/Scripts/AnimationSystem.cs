@@ -72,6 +72,7 @@ public class AnimationSystem : MonoBehaviour
         internal float delta;
         internal string propertyName;
         internal bool reset;
+        internal float currentValue;
 
     }
 
@@ -89,8 +90,10 @@ public class AnimationSystem : MonoBehaviour
     //Global tween duration.
     public float tweensDuration;
 
-    //The material on the image or object that will be animated
-    private Material realMat;
+  
+    //Material property blocks
+    private Renderer targetRenderer;
+    private MaterialPropertyBlock mpb;
 
     //the base material reference
     [SerializeField] Material _baseMat;
@@ -116,19 +119,19 @@ public class AnimationSystem : MonoBehaviour
                     //If there are missing properties, create one and set it.
                     if (_properties.Count < _states.animSO.propertyNames.Count)
                     {
-                        AnimatedProperty addedProp = new AnimatedProperty();
+                        AnimatedProperty _addedProp = new AnimatedProperty();
 
-                        _properties.Add(addedProp);
+                        _properties.Add(_addedProp);
                     }
 
                     if (_properties[j].propertyName != _states.animSO.propertyNames[j])
                     {
-                        AnimatedProperty newProp = new AnimatedProperty();
+                        AnimatedProperty _newProp = new AnimatedProperty();
 
-                        newProp.propertyName = states[i].animSO.propertyNames[j];
-                        newProp.settings = new AnimationSettings();
+                        _newProp.propertyName = states[i].animSO.propertyNames[j];
+                        _newProp.settings = new AnimationSettings();
 
-                        _properties[j] = newProp;
+                        _properties[j] = _newProp;
 
                     }
 
@@ -138,10 +141,10 @@ public class AnimationSystem : MonoBehaviour
                 // Initialize runtime dictionaries from the SO. These dictionaries carry the float values of the property.
                 _properties[j].propertyDict = new Dictionary<string, float>();
 
-                string name = _properties[j].propertyName;
-                float val = _states.animSO.state.GetFloat(name);
+                string _name = _properties[j].propertyName;
+                float _val = _states.animSO.state.GetFloat(_name);
 
-                _properties[j].propertyDict.Add(name, val);
+                _properties[j].propertyDict.Add(_name, _val);
 
 
 
@@ -154,56 +157,50 @@ public class AnimationSystem : MonoBehaviour
      The dotween tween is set up at the start. Each tween is contained in a tween driver object.
      The tween lerps its driver value from 0-1. This is multiplied with a delta difference to drive property changes.
     */
-    private TweenDriver SetupTween(TweenDriver tweenDriver, float duration)
+    private TweenDriver SetupTween(TweenDriver _tDriver, float _duration, float _currentValue)
     {
-        tweenDriver.driver = 0f;
-        tweenDriver.settings = new AnimationSettings();
-        tweenDriver.duration = duration;
-        tweenDriver.tween = DOTween
-            .To(() => tweenDriver.driver, x => tweenDriver.driver = x, 1f, duration)
+        _tDriver.driver = 0f;
+        _tDriver.currentValue = _currentValue;
+        _tDriver.settings = new AnimationSettings();
+        _tDriver.duration = _duration;
+        _tDriver.tween = DOTween
+            .To(() => _tDriver.driver, x => _tDriver.driver = x, 1f, _duration)
             .SetAutoKill(false)
             .Pause()
             .OnUpdate(() =>
             {
                 //gets the difference of current material state, and incrementally add it to current value, while lerping the addition. 
-                float val = tweenDriver.start + tweenDriver.delta * tweenDriver.driver;
-                realMat.SetFloat(tweenDriver.propertyName, val);
+                float _val = _tDriver.start + _tDriver.delta * _tDriver.driver;
+                _tDriver.currentValue = _val;
+                mpb.SetFloat(_tDriver.propertyName, _val);
+                targetRenderer.SetPropertyBlock(mpb);
             })
             .OnComplete(() =>
             {
                 //Make sure tween set to end value;
-                realMat.SetFloat(
-                  tweenDriver.propertyName,
-                 tweenDriver.start + tweenDriver.delta
-             );
+                mpb.SetFloat(_tDriver.propertyName,_tDriver.start + _tDriver.delta);
+                targetRenderer.SetPropertyBlock(mpb);
+                _tDriver.currentValue = _tDriver.start + _tDriver.delta;
                 //Reset driver, trigger previous state if set to.
-                tweenDriver.driver = 0f;
-                if (tweenDriver.reset)
+                _tDriver.driver = 0f;
+                if (_tDriver.reset)
                 {
                     TriggerAnimate(prevAnimState.animSO);
                 }
             });
 
 
-        return tweenDriver;
+        return _tDriver;
     }
 
     private void Start()
     {
         currentAnimState = states[0];
 
-        //Create a copy of the current material 
-        //(If using MPB would change code here not to create instance. This Demo does not use MBP, would use in production to avoid instances.)
-        realMat = Instantiate(states[0].animSO.state);
+       //Create MBP to animate and set the renderer. To allow shared materials with seperate animation.
+        targetRenderer = GetComponent<Renderer>();
+        mpb = new MaterialPropertyBlock();
 
-        if (this.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-        {
-            renderer.material = realMat;
-        }
-        if (this.TryGetComponent<Image>(out Image image))
-        {
-            image.material = realMat;
-        }
 
         SetProperties();
 
@@ -213,24 +210,37 @@ public class AnimationSystem : MonoBehaviour
         //Create the tweens for each property that is stored to be animated
         for (int i = 0; i < currentAnimState.animSO.propertyNames.Count; i++)
         {
-            TweenDriver newTweener = new TweenDriver();
-            propertyTweenDict.Add(currentAnimState.animSO.propertyNames[i], SetupTween(newTweener, tweensDuration));
+            TweenDriver newDriver = new TweenDriver();
+            string _propName = currentAnimState.animSO.propertyNames[i];
+            float _propValue = currentAnimState.properties[i].propertyDict[_propName];
+            propertyTweenDict.Add(_propName, SetupTween(newDriver, tweensDuration, _propValue));
         }
 
 
 
     }
+    private float GetFloat(string propertyName)
+    {
+        targetRenderer.GetPropertyBlock(mpb);
+        return mpb.GetFloat(propertyName);
+    }
 
+    private void SetFloat(string propertyName, float value)
+    {
+        targetRenderer.GetPropertyBlock(mpb);
+        mpb.SetFloat(propertyName, value);
+        targetRenderer.SetPropertyBlock(mpb);
+    }
 
-    public void TriggerAnimate(AnimationStateSO SO)
+    public void TriggerAnimate(AnimationStateSO _SO)
     {
 
 
         for (int i = 0; i < states.Count; i++)
         {
-            //Check SO is actually in the list of states to animate.
+            //Check _SO is actually in the list of states to animate.
             //Set previous state, to reset animation later if needed.
-            if (SO != states[i].animSO) continue;
+            if (_SO != states[i].animSO) continue;
             if (currentAnimState != states[i])
             {
                 prevAnimState = currentAnimState;
@@ -243,13 +253,13 @@ public class AnimationSystem : MonoBehaviour
         for (int j = 0; j < currentAnimState.properties.Count; j++)
         {
 
-            var prop = currentAnimState.properties[j];
+            var _prop = currentAnimState.properties[j];
             //Send in the animated property object needed for animation. Check if material is different, to not send when not needed. 
 
-            if (realMat.GetFloat(prop.propertyName) != prop.propertyDict[prop.propertyName])
+            if (GetFloat(_prop.propertyName) != _prop.propertyDict[_prop.propertyName])
             {
                // Debug.Log($"Animate prop {prop.propertyName}");
-                AnimateValue(prop);
+                AnimateValue(_prop);
             }
 
         }
@@ -260,37 +270,37 @@ public class AnimationSystem : MonoBehaviour
 
 
     //Get the property settings and value to animate to, and then restart the tween driver's tween.
-    private void AnimateValue(AnimatedProperty prop)
+    private void AnimateValue(AnimatedProperty _prop)
     {
 
         //Get tween driver to animate
 
-        TweenDriver td = propertyTweenDict[prop.propertyName];
+        TweenDriver _tDriver = propertyTweenDict[_prop.propertyName];
 
         //Start value is current material
-        td.start = realMat.GetFloat(prop.propertyName);
+        _tDriver.start = _tDriver.currentValue;
         //Delta is difference between start and new, to add to current.
-        td.delta = prop.propertyDict[prop.propertyName] - td.start;
+        _tDriver.delta = _prop.propertyDict[_prop.propertyName] - _tDriver.start;
         //Other data to update.
-        td.propertyName = prop.propertyName;
-        td.reset = currentAnimState.shouldReset;
+        _tDriver.propertyName = _prop.propertyName;
+        _tDriver.reset = currentAnimState.shouldReset;
 
 
 
         //Ease settings that new property has from current state.
-        td.tween.SetEase(prop.settings.ease, prop.settings.strength, prop.settings.extra);
-        if (!td.tween.IsPlaying() && !td.tween.IsComplete())
+        _tDriver.tween.SetEase(_prop.settings.ease, _prop.settings.strength, _prop.settings.extra);
+        if (!_tDriver.tween.IsPlaying() && !_tDriver.tween.IsComplete())
         {
             // First play of the tween.
-            td.tween.Play();
+            _tDriver.tween.Play();
         }
 
         // Playback when complete.
-        if (td.tween.IsComplete())
+        if (_tDriver.tween.IsComplete())
         {
             //send in current driver value and restart. 
-            td.tween.ChangeStartValue(td.driver, 0);
-            td.tween.Restart();
+            _tDriver.tween.ChangeStartValue(_tDriver.driver, 0);
+            _tDriver.tween.Restart();
         }
 
 

@@ -24,16 +24,16 @@ public class AnimationStateSO : ScriptableObject
         {
 
 
-            string property = state.GetPropertyNames(MaterialPropertyType.Float)[i];
+            string prop = state.GetPropertyNames(MaterialPropertyType.Float)[i];
             //parameters need to start with PR to be included, make sure to name parameters this way. 
             //This is so it doesn't add extra non-custom parameters.
-            if (!property.Contains("PR"))
+            if (!prop.Contains("PR"))
                 continue;
 
-            string normalized = property.Trim();
+            string normalized = prop.Trim();
 
             propertyNames.Add(normalized);
-            stateFloatDict.Add(normalized, state.GetFloat(property));
+            stateFloatDict.Add(normalized, state.GetFloat(prop));
 
         }
     }    
