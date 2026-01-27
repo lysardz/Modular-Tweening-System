@@ -172,13 +172,13 @@ public class AnimationSystem : MonoBehaviour
                 //gets the difference of current material state, and incrementally add it to current value, while lerping the addition. 
                 float _val = _tDriver.start + _tDriver.delta * _tDriver.driver;
                 _tDriver.currentValue = _val;
-                mpb.SetFloat(_tDriver.propertyName, _val);
+                SetFloat(_tDriver.propertyName, _val);
                 targetRenderer.SetPropertyBlock(mpb);
             })
             .OnComplete(() =>
             {
                 //Make sure tween set to end value;
-                mpb.SetFloat(_tDriver.propertyName,_tDriver.start + _tDriver.delta);
+                SetFloat(_tDriver.propertyName,_tDriver.start + _tDriver.delta);
                 targetRenderer.SetPropertyBlock(mpb);
                 _tDriver.currentValue = _tDriver.start + _tDriver.delta;
                 //Reset driver, trigger previous state if set to.
@@ -219,6 +219,7 @@ public class AnimationSystem : MonoBehaviour
 
 
     }
+    //Set and get mbp data
     private float GetFloat(string propertyName)
     {
         targetRenderer.GetPropertyBlock(mpb);
