@@ -7,6 +7,7 @@ This is an early framework for a modular animation state system for material cha
 - **Swappable animation states** for any **material.**
 - **Inspector level state creation** - immediately create, name and edit new states.
 - **Assign triggers with state data** in code when needed.
+- Animates MBP's, with shared material on objects.
 - Capable of expanding toward **object transform tweening states**, or **any values needing lerping in code.**
 ## Goals of this project.
 The original purpose of making this system, was to drive the animation of an SDF button project I had made.
@@ -46,6 +47,10 @@ Such as game object Transform - where transform states could then be stored and 
 
 <img src="https://github.com/lysardz/Modular-Tweening-System/blob/main/SetupGifs/Transitions.gif" alt="Alt text">
 
+- Here are two objects, with the same material, being animated through MBPs.
+
+<img src="https://github.com/lysardz/Modular-Tweening-System/blob/main/SetupGifs/Material%20Property%20Blocks.gif" alt="Alt text">
+
 ## NOTES AND FUTURE CONSIDERATIONS
 ### On use cases:
 - This system was useful, and originated for the purposes of my sdf button project. The project wanted to avoid using multiple image parts and animations, and instead animate property values for the specific effects.
@@ -55,7 +60,6 @@ Such as game object Transform - where transform states could then be stored and 
   
 ### On material parameters:
 - Right now the script handles adding any amount of new properties, but it does not currently handle removing them in the inspector, thus they need to be removed manually for now.
-- This script used material instance creation, as I had set up buttons with this systems in my other project. UI cannot have material property blocks, thus I had to set instances. But for 3D or sprites, material property blocks would be implemented if it was used for objects in a production setting.
 
 ### On tweening considerations:
 - Right now, rapid fire of animation can visually make transitions look like they stutter potentially - a safeguard should be considered in the future, such as tween count tracking and blocking. Or a buffer time that can be set, to counter animation triggers. 
